@@ -33,33 +33,37 @@ import './theme/variables.css';
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
+import { ApolloProvider } from '@apollo/client';
+import { useApollo } from './utils/apollo';
 
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path="/" component={ Home } exact={ true } />
-          <Route path="/login" component={ Login } exact={ true } />
-          <Route path="/register" component={ Register } />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href="/">
-            <IonIcon icon={ triangle } />
-            <IonLabel>Home</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="login" href="/login">
-            <IonIcon icon={ ellipse } />
-            <IonLabel>Login</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="register" href="/register">
-            <IonIcon icon={ square } />
-            <IonLabel>Register</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
+  <ApolloProvider client={ useApollo() }>
+    <IonApp>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/" component={ Home } exact={ true } />
+            <Route path="/login" component={ Login } exact={ true } />
+            <Route path="/register" component={ Register } />
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="home" href="/">
+              <IonIcon icon={ triangle } />
+              <IonLabel>Home</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="login" href="/login">
+              <IonIcon icon={ ellipse } />
+              <IonLabel>Login</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="register" href="/register">
+              <IonIcon icon={ square } />
+              <IonLabel>Register</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>
+  </ApolloProvider>
 );
 
 export default App;
