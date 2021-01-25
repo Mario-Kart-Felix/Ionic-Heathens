@@ -212,6 +212,17 @@ export type LoginUserMutation = (
   ) }
 );
 
+export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMeQuery = (
+  { __typename?: 'Query' }
+  & { getMe: (
+    { __typename?: 'UserEntity' }
+    & Pick<UserEntity, 'username'>
+  ) }
+);
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -254,6 +265,38 @@ export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<Lo
 export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
 export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
 export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
+export const GetMeDocument = gql`
+    query GetMe {
+  getMe {
+    username
+  }
+}
+    `;
+
+/**
+ * __useGetMeQuery__
+ *
+ * To run a query within a React component, call `useGetMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMeQuery(baseOptions?: Apollo.QueryHookOptions<GetMeQuery, GetMeQueryVariables>) {
+        return Apollo.useQuery<GetMeQuery, GetMeQueryVariables>(GetMeDocument, baseOptions);
+      }
+export function useGetMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMeQuery, GetMeQueryVariables>) {
+          return Apollo.useLazyQuery<GetMeQuery, GetMeQueryVariables>(GetMeDocument, baseOptions);
+        }
+export type GetMeQueryHookResult = ReturnType<typeof useGetMeQuery>;
+export type GetMeLazyQueryHookResult = ReturnType<typeof useGetMeLazyQuery>;
+export type GetMeQueryResult = Apollo.QueryResult<GetMeQuery, GetMeQueryVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello
