@@ -1,4 +1,4 @@
-mutation Register($password: String!, $username: String!, $name: String!, $email: String!, $recaptchaToken: String!){
+mutation Register($password: String!, $username: String!, $name: String!, $email: String!, $recaptchaToken: String){
   registerUser(password: $password, username: $username, name: $name,email: $email, recaptchaToken: $recaptchaToken){
     name
   }

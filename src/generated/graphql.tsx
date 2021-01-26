@@ -43,6 +43,7 @@ export type QueryGetChannelMessagesArgs = {
 
 export type UserEntity = {
   __typename?: 'UserEntity';
+  _id: Scalars['String'];
   id: Scalars['Float'];
   username: Scalars['String'];
   name: Scalars['String'];
@@ -56,6 +57,7 @@ export type UserEntity = {
 
 export type ChannelEntity = {
   __typename?: 'ChannelEntity';
+  _id: Scalars['String'];
   id: Scalars['Float'];
   name: Scalars['String'];
   desc: Scalars['String'];
@@ -66,6 +68,7 @@ export type ChannelEntity = {
 
 export type MessageEntity = {
   __typename?: 'MessageEntity';
+  _id: Scalars['String'];
   id: Scalars['Float'];
   content: Scalars['String'];
   ivString: Scalars['String'];
@@ -88,6 +91,7 @@ export type Mutation = {
   verifyEmail: Scalars['Boolean'];
   registerUser: UserEntity;
   loginUser: UserEntity;
+  nativeLogin: Scalars['String'];
   logoutUser: Scalars['Boolean'];
   joinChannel: Scalars['Boolean'];
   leaveChannel: Scalars['Boolean'];
@@ -127,6 +131,13 @@ export type MutationRegisterUserArgs = {
 
 
 export type MutationLoginUserArgs = {
+  recaptchaToken?: Maybe<Scalars['String']>;
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+
+export type MutationNativeLoginArgs = {
   recaptchaToken?: Maybe<Scalars['String']>;
   password: Scalars['String'];
   username: Scalars['String'];
@@ -250,7 +261,7 @@ export type LeaveChannelMutation = (
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
-  recaptchaToken: Scalars['String'];
+  recaptchaToken?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -258,7 +269,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { loginUser: (
     { __typename?: 'UserEntity' }
-    & Pick<UserEntity, 'name'>
+    & Pick<UserEntity, 'username'>
   ) }
 );
 
@@ -289,7 +300,7 @@ export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   name: Scalars['String'];
   email: Scalars['String'];
-  recaptchaToken: Scalars['String'];
+  recaptchaToken?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -650,13 +661,13 @@ export type LeaveChannelMutationHookResult = ReturnType<typeof useLeaveChannelMu
 export type LeaveChannelMutationResult = Apollo.MutationResult<LeaveChannelMutation>;
 export type LeaveChannelMutationOptions = Apollo.BaseMutationOptions<LeaveChannelMutation, LeaveChannelMutationVariables>;
 export const LoginDocument = gql`
-    mutation Login($username: String!, $password: String!, $recaptchaToken: String!) {
+    mutation Login($username: String!, $password: String!, $recaptchaToken: String) {
   loginUser(
     username: $username
     password: $password
     recaptchaToken: $recaptchaToken
   ) {
-    name
+    username
   }
 }
     `;
@@ -750,7 +761,7 @@ export type PostMessageMutationHookResult = ReturnType<typeof usePostMessageMuta
 export type PostMessageMutationResult = Apollo.MutationResult<PostMessageMutation>;
 export type PostMessageMutationOptions = Apollo.BaseMutationOptions<PostMessageMutation, PostMessageMutationVariables>;
 export const RegisterDocument = gql`
-    mutation Register($password: String!, $username: String!, $name: String!, $email: String!, $recaptchaToken: String!) {
+    mutation Register($password: String!, $username: String!, $name: String!, $email: String!, $recaptchaToken: String) {
   registerUser(
     password: $password
     username: $username

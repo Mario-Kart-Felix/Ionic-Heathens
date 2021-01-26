@@ -1,13 +1,28 @@
 import { IonButton, IonContent, IonPage } from '@ionic/react';
 import React, { Fragment } from 'react';
-import { useGetMeQuery } from '../generated/graphql';
+import { useGetMeQuery, useLoginMutation } from '../generated/graphql';
 import Preloader from './Preloader';
 import { Link } from 'react-router-dom';
+import { Storage } from '@capacitor/core';
+import { AUTH_TOKEN } from '../constants';
 import './Home.css';
 
 const Home = () => {
 
     const { data, loading } = useGetMeQuery();
+    const [ login ] = useLoginMutation({
+        variables: {
+            username: 'ryuk',
+            password: 'Aman123@'
+        }
+    });
+
+    const handleLogin = () => {
+        login().then(async (data) => {
+            const token = data.data?.nativeLogin;
+            Storage.set({ key: AUTH_TOKEN, value: token || '' });
+        }).catch(err => console.error(err));
+    };
 
     if (loading) {
         return <Preloader />;
@@ -30,7 +45,7 @@ const Home = () => {
                         <div>
                             <p>We don't deal with outsiders very well.</p>
                             <Link to='/login'>
-                                <IonButton color='tertiary'>
+                                <IonButton onClick={ handleLogin } color='tertiary'>
                                     Login
                                 </IonButton>
                             </Link>
