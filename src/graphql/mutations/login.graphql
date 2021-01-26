@@ -1,5 +1,5 @@
-mutation LoginUser($username: String!, $password: String!){
-  loginUser(username: $username, password: $password){
-    username
-  }
+mutation Login($username: String!, $password: String!, $recaptchaToken: String!){
+    loginUser(username: $username, password: $password, recaptchaToken: $recaptchaToken){
+        name
+    }
 }

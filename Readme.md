@@ -38,7 +38,7 @@
 
 ### Codebase
     - PWA
-    - IOS/ Android App
+    - IOS/Android App
     - Electron App
 
 - [Deployed](https://app.21heathens.tk)

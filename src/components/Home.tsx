@@ -1,37 +1,43 @@
-import { IonPage, IonTitle } from '@ionic/react';
-import React, { useEffect } from 'react';
-import { useHelloQuery, useLoginUserMutation } from '../generated/graphql';
+import { IonButton, IonContent, IonPage } from '@ionic/react';
+import React, { Fragment } from 'react';
+import { useGetMeQuery } from '../generated/graphql';
+import Preloader from './Preloader';
+import { Link } from 'react-router-dom';
+import './Home.css';
 
 const Home = () => {
 
-    const { loading, data } = useHelloQuery();
-    const [ loginUser, loginUserRes ] = useLoginUserMutation();
+    const { data, loading } = useGetMeQuery();
 
-    useEffect(() => {
-        loginUser({
-            variables: {
-                username: 'ryuk',
-                password: 'Aman123@'
-            }
-        }).then(() => console.log('logged in!')).catch(err => console.error(err));
-        // eslint-disable-next-line
-    }, []);
-
-    if (loading || loginUserRes.loading) {
-        return <h1>Loading...</h1>;
+    if (loading) {
+        return <Preloader />;
     }
 
     return (
         <IonPage>
-            <IonTitle>
-                Home
-            </IonTitle>
-            {loginUserRes.data ? <pre>
-                { JSON.stringify(loginUserRes.data, null, 3) }
-            </pre> : null }
-            {data ? <pre>
-                { JSON.stringify(data, null, 3) }
-            </pre> : null }
+            <IonContent>
+                <div className='homeContainer'>
+                    { data ? <Fragment>
+                        <div>
+                            <p>Welcome { data.getMe.username }</p>
+                            <Link to='/dashboard'>
+                                <IonButton color='tertiary'>
+                                    Dashboard
+                                </IonButton>
+                            </Link>
+                        </div>
+                    </Fragment> :
+                        <div>
+                            <p>We don't deal with outsiders very well.</p>
+                            <Link to='/login'>
+                                <IonButton color='tertiary'>
+                                    Login
+                                </IonButton>
+                            </Link>
+                        </div>
+                    }
+                </div>
+            </IonContent>
         </IonPage>
     );
 };

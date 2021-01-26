@@ -35,6 +35,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from './utils/apollo';
+import Dashboard from './components/Dashboard';
 
 const App: React.FC = () => (
   <ApolloProvider client={ useApollo() }>
@@ -45,6 +46,7 @@ const App: React.FC = () => (
             <Route path="/" component={ Home } exact={ true } />
             <Route path="/login" component={ Login } exact={ true } />
             <Route path="/register" component={ Register } />
+            <Route path="/dashboard" component={ Dashboard } />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="home" href="/">

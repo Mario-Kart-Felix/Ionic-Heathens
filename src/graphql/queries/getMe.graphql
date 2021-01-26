@@ -1,5 +1,6 @@
 query GetMe{
-    getMe{
-        username
-    }
+  getMe{
+    username
+    id
+  }
 }

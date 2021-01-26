@@ -1,0 +1,14 @@
+query GetChannelMessages($channelId: Float!, $limit: Float!, $cursor: String){
+  getChannelMessages(cursor: $cursor, limit: $limit, channelId: $channelId){
+    messages{
+      content
+      id
+      poster{
+      username
+      id
+    }
+      createdAt
+    }
+    hasMore
+  }
+}
