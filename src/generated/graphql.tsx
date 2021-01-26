@@ -22,6 +22,7 @@ export type Query = {
   getChannelUsers?: Maybe<Array<UserEntity>>;
   hello: Scalars['String'];
   getChannelMessages: PaginatedMessages;
+  nativeGetChannelMessages: PaginatedMessages;
 };
 
 
@@ -36,6 +37,13 @@ export type QueryGetChannelUsersArgs = {
 
 
 export type QueryGetChannelMessagesArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Float'];
+  channelId: Scalars['Float'];
+};
+
+
+export type QueryNativeGetChannelMessagesArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Float'];
   channelId: Scalars['Float'];
@@ -93,12 +101,17 @@ export type Mutation = {
   loginUser: UserEntity;
   nativeLogin: Scalars['String'];
   logoutUser: Scalars['Boolean'];
+  nativeLogout: Scalars['Boolean'];
   joinChannel: Scalars['Boolean'];
+  nativeJoinChannel: Scalars['Boolean'];
   leaveChannel: Scalars['Boolean'];
+  nativeLeaveChannel: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
+  nativeDeleteUser: Scalars['Boolean'];
   addChannel: ChannelEntity;
   deleteChannel: Scalars['Boolean'];
   postMessage: MessageEntity;
+  nativePostMessage: MessageEntity;
   deleteMessage: Scalars['Boolean'];
 };
 
@@ -149,7 +162,17 @@ export type MutationJoinChannelArgs = {
 };
 
 
+export type MutationNativeJoinChannelArgs = {
+  channelId: Scalars['Float'];
+};
+
+
 export type MutationLeaveChannelArgs = {
+  channelId: Scalars['Float'];
+};
+
+
+export type MutationNativeLeaveChannelArgs = {
   channelId: Scalars['Float'];
 };
 
@@ -166,6 +189,12 @@ export type MutationDeleteChannelArgs = {
 
 
 export type MutationPostMessageArgs = {
+  channelId: Scalars['Float'];
+  content: Scalars['String'];
+};
+
+
+export type MutationNativePostMessageArgs = {
   channelId: Scalars['Float'];
   content: Scalars['String'];
 };
@@ -224,7 +253,7 @@ export type DeleteUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type DeleteUserMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deleteUser'>
+  & Pick<Mutation, 'nativeDeleteUser'>
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -245,7 +274,7 @@ export type JoinChannelMutationVariables = Exact<{
 
 export type JoinChannelMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'joinChannel'>
+  & Pick<Mutation, 'nativeJoinChannel'>
 );
 
 export type LeaveChannelMutationVariables = Exact<{
@@ -255,7 +284,7 @@ export type LeaveChannelMutationVariables = Exact<{
 
 export type LeaveChannelMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'leaveChannel'>
+  & Pick<Mutation, 'nativeLeaveChannel'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -275,7 +304,7 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'logoutUser'>
+  & Pick<Mutation, 'nativeLogout'>
 );
 
 export type PostMessageMutationVariables = Exact<{
@@ -286,7 +315,7 @@ export type PostMessageMutationVariables = Exact<{
 
 export type PostMessageMutation = (
   { __typename?: 'Mutation' }
-  & { postMessage: (
+  & { nativePostMessage: (
     { __typename?: 'MessageEntity' }
     & Pick<MessageEntity, 'content'>
   ) }
@@ -340,7 +369,7 @@ export type GetChannelMessagesQueryVariables = Exact<{
 
 export type GetChannelMessagesQuery = (
   { __typename?: 'Query' }
-  & { getChannelMessages: (
+  & { nativeGetChannelMessages: (
     { __typename?: 'PaginatedMessages' }
     & Pick<PaginatedMessages, 'hasMore'>
     & { messages: Array<(
@@ -539,7 +568,7 @@ export type DeleteMessageMutationResult = Apollo.MutationResult<DeleteMessageMut
 export type DeleteMessageMutationOptions = Apollo.BaseMutationOptions<DeleteMessageMutation, DeleteMessageMutationVariables>;
 export const DeleteUserDocument = gql`
     mutation DeleteUser {
-  deleteUser
+  nativeDeleteUser
 }
     `;
 export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, DeleteUserMutationVariables>;
@@ -599,7 +628,7 @@ export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordM
 export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const JoinChannelDocument = gql`
     mutation JoinChannel($channelId: Float!) {
-  joinChannel(channelId: $channelId)
+  nativeJoinChannel(channelId: $channelId)
 }
     `;
 export type JoinChannelMutationFn = Apollo.MutationFunction<JoinChannelMutation, JoinChannelMutationVariables>;
@@ -629,7 +658,7 @@ export type JoinChannelMutationResult = Apollo.MutationResult<JoinChannelMutatio
 export type JoinChannelMutationOptions = Apollo.BaseMutationOptions<JoinChannelMutation, JoinChannelMutationVariables>;
 export const LeaveChannelDocument = gql`
     mutation LeaveChannel($channelId: Float!) {
-  leaveChannel(channelId: $channelId)
+  nativeLeaveChannel(channelId: $channelId)
 }
     `;
 export type LeaveChannelMutationFn = Apollo.MutationFunction<LeaveChannelMutation, LeaveChannelMutationVariables>;
@@ -695,7 +724,7 @@ export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
-  logoutUser
+  nativeLogout
 }
     `;
 export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
@@ -724,7 +753,7 @@ export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const PostMessageDocument = gql`
     mutation PostMessage($channelId: Float!, $content: String!) {
-  postMessage(channelId: $channelId, content: $content) {
+  nativePostMessage(channelId: $channelId, content: $content) {
     content
   }
 }
@@ -865,7 +894,7 @@ export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutatio
 export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;
 export const GetChannelMessagesDocument = gql`
     query GetChannelMessages($channelId: Float!, $limit: Float!, $cursor: String) {
-  getChannelMessages(cursor: $cursor, limit: $limit, channelId: $channelId) {
+  nativeGetChannelMessages(cursor: $cursor, limit: $limit, channelId: $channelId) {
     messages {
       content
       id

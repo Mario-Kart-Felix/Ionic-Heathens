@@ -1,5 +1,5 @@
 mutation PostMessage($channelId: Float!, $content: String!){
-  postMessage(channelId: $channelId, content: $content){
+  nativePostMessage(channelId: $channelId, content: $content){
     content
   }
 }
