@@ -26,3 +26,5 @@ yarn-error.log*
 electron
 ios
 android
+.env
+.env.local

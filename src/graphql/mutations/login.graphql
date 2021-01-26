@@ -1,5 +1,3 @@
 mutation Login($username: String!, $password: String!, $recaptchaToken: String){
-    loginUser(username: $username, password: $password, recaptchaToken: $recaptchaToken){
-        username
-    }
+    nativeLogin(username: $username, password: $password, recaptchaToken: $recaptchaToken)
 }

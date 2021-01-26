@@ -5,25 +5,13 @@ import { onError } from '@apollo/client/link/error';
 import { split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
-import { Storage, Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/core';
 import { AUTH_TOKEN } from "../constants";
-import '@capacitor-community/http';
-
-const getCookies = async () => {
-    const { Http } = Plugins;
-    const cookies = await Http.getCookies({
-        url: `${ process.env.REACT_APP_SERVER_URL }/graphql`
-    });
-    return cookies;
-};
 
 const createHttpLink = () => {
 
-    console.log('connecting to apollo...');
-
     const httpLink = new HttpLink({
         uri: `${ process.env.REACT_APP_SERVER_URL }/graphql`,
-        credentials: 'include',
     });
 
     const wsUri = process.env.REACT_APP_NODE_ENV === 'production' ? `wss://${ process.env.REACT_APP_SERVER_DOMAIN }/graphql` : `ws://${ process.env.REACT_APP_SERVER_DOMAIN }/graphql`;
@@ -66,31 +54,16 @@ const authLink = setContext(async (_, { headers }) => {
 
     const token = await Storage.get({ key: AUTH_TOKEN });
 
-    const cookies = await getCookies();
-
-    let myCookies = '';
-    for (const key in cookies.value) {
-        if (Object.prototype.hasOwnProperty.call(cookies.value, key)) {
-            const element = cookies.value[ key ];
-            myCookies += `${ element.key }=${ element.value }`;
-        }
-    }
-
     return {
         headers: {
             ...headers,
-            cookie: myCookies,
-            // authorization: token ? `Bearer ${ token.value }` : '',
+            authorization: token ? `Bearer ${ token.value }` : '',
         }
     };
 
 });
 
-const httpLink = new HttpLink({
-    uri: `${ process.env.REACT_APP_SERVER_URL }/graphql`,
-    credentials: 'include',
-});
-
+const httpLink = createHttpLink();
 
 const link = ApolloLink.from([
     errorLink,
@@ -101,35 +74,7 @@ const link = ApolloLink.from([
 export const useApollo = () => {
 
     return new ApolloClient({
-        uri: `${ process.env.NEXT_PUBLIC_SERVER_URL }/graphql`,
         link,
-        credentials: 'include',
-        cache: new InMemoryCache({
-            // typePolicies: {
-            // PaginatedMessages: {
-            //     fields: {
-            //         messages: {
-            //             keyArgs: [],
-            //             merge (
-            //                 existing = [],
-            //                 incoming
-            //             ) {
-            //                 console.log('existing auth = ', existing);
-            //                 console.log('incoming auth = ', incoming);
-            //                 return [ ...existing, ...incoming ];
-            //             },
-            //         },
-            //         hasMore: {
-            //             keyArgs: [],
-            //             merge (existing = false, incoming) {
-            //                 console.log('existing hasmore = ', existing);
-            //                 console.log('incoming hasmore = ', incoming);
-            //                 return incoming;
-            //             }
-            //         }
-            //     },
-            // },
-            // },
-        }),
+        cache: new InMemoryCache(),
     });
 };

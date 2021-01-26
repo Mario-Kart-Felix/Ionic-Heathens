@@ -267,10 +267,7 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & { loginUser: (
-    { __typename?: 'UserEntity' }
-    & Pick<UserEntity, 'username'>
-  ) }
+  & Pick<Mutation, 'nativeLogin'>
 );
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
@@ -662,13 +659,11 @@ export type LeaveChannelMutationResult = Apollo.MutationResult<LeaveChannelMutat
 export type LeaveChannelMutationOptions = Apollo.BaseMutationOptions<LeaveChannelMutation, LeaveChannelMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String!, $password: String!, $recaptchaToken: String) {
-  loginUser(
+  nativeLogin(
     username: $username
     password: $password
     recaptchaToken: $recaptchaToken
-  ) {
-    username
-  }
+  )
 }
     `;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
