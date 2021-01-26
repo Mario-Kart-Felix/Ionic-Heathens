@@ -64,7 +64,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const authLink = setContext(async (_, { headers }) => {
 
-    const token = await Storage.get({ key: AUTH_TOKEN });
+    // const token = await Storage.get({ key: AUTH_TOKEN });
 
     const cookies = await getCookies();
 
@@ -76,10 +76,12 @@ const authLink = setContext(async (_, { headers }) => {
         }
     }
 
+    console.log('myCookies = ', myCookies);
+
     return {
         headers: {
             ...headers,
-            cookie: myCookies,
+            cookie: myCookies
             // authorization: token ? `Bearer ${ token.value }` : '',
         }
     };

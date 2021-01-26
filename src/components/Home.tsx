@@ -19,8 +19,8 @@ const Home = () => {
 
     const handleLogin = () => {
         login().then(async (data) => {
-            const token = data.data?.nativeLogin;
-            Storage.set({ key: AUTH_TOKEN, value: token || '' });
+            // const token = data.data?.nativeLogin;
+            // Storage.set({ key: AUTH_TOKEN, value: token || '' });
         }).catch(err => console.error(err));
     };
 
