@@ -1,26 +1,51 @@
 import { IonButton, IonContent, IonPage } from '@ionic/react';
-import React, { Fragment } from 'react';
-import { useGetMeQuery, useLoginMutation } from '../generated/graphql';
+import React, { FC, Fragment, useEffect } from 'react';
+import { useGetMeQuery, useLogoutMutation } from '../generated/graphql';
 import Preloader from './Preloader';
-import { Link } from 'react-router-dom';
+import { Link, RouterProps } from 'react-router-dom';
 import { Storage } from '@capacitor/core';
-import { AUTH_TOKEN } from '../constants';
 import './Home.css';
+import { useRecoilState } from 'recoil';
+import { snackbarState } from '../recoil/state';
+import { useApolloClient } from '@apollo/client';
 
-const Home = () => {
+const Home: FC<RouterProps> = ({ history }) => {
 
     const { data, loading } = useGetMeQuery();
-    const [ login ] = useLoginMutation({
-        variables: {
-            username: 'ryuk',
-            password: 'Aman123@'
-        }
-    });
+    const [ logout, { error } ] = useLogoutMutation();
 
-    const handleLogin = () => {
-        login().then(async (data) => {
-            const token = data.data?.nativeLogin;
-            Storage.set({ key: AUTH_TOKEN, value: token || '' });
+    const [ snackbar, setSnackbar ] = useRecoilState(snackbarState);
+    const apolloClient = useApolloClient();
+
+    useEffect(() => {
+        if (error) {
+            setSnackbar({
+                ...snackbar,
+                isActive: true,
+                severity: {
+                    ...snackbar.severity,
+                    type: 'error'
+                },
+                message: error.message
+            });
+        }
+        // eslint-disable-next-line
+    }, [ error ]);
+
+    const handleLogout = () => {
+        logout().then(async () => {
+            await Storage.clear();
+            await apolloClient.resetStore();
+            setSnackbar({
+                ...snackbar,
+                isActive: true,
+                message: 'Logged Out',
+                severity: {
+                    ...snackbar.severity,
+                    type: 'success'
+                }
+            });
+            history.push('/login');
         }).catch(err => console.error(err));
     };
 
@@ -36,19 +61,14 @@ const Home = () => {
                         <div>
                             <p>Welcome { data.getMe.username }</p>
                             <Link to='/dashboard'>
-                                <IonButton color='tertiary'>
-                                    Dashboard
+                                <IonButton onClick={ handleLogout } color='tertiary'>
+                                    Logout
                                 </IonButton>
                             </Link>
                         </div>
                     </Fragment> :
                         <div>
                             <p>We don't deal with outsiders very well.</p>
-                            <Link to='/login'>
-                                <IonButton onClick={ handleLogin } color='tertiary'>
-                                    Login
-                                </IonButton>
-                            </Link>
                         </div>
                     }
                 </div>

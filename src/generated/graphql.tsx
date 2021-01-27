@@ -51,6 +51,7 @@ export type QueryNativeGetChannelMessagesArgs = {
 
 export type UserEntity = {
   __typename?: 'UserEntity';
+  ivString: Scalars['String'];
   _id: Scalars['String'];
   id: Scalars['Float'];
   username: Scalars['String'];

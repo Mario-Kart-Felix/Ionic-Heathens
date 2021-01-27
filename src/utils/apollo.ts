@@ -53,6 +53,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const authLink = setContext(async (_, { headers }) => {
 
     const token = await Storage.get({ key: AUTH_TOKEN });
+    // console.log('token = ', token);
 
     return {
         headers: {
