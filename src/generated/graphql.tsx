@@ -17,6 +17,7 @@ export type Query = {
   __typename?: 'Query';
   getMe: UserEntity;
   getMyChannel: ChannelEntity;
+  nativeGetMyChannel: ChannelEntity;
   getChannels: Array<ChannelEntity>;
   getSingleChannel?: Maybe<ChannelEntity>;
   getChannelUsers?: Maybe<Array<UserEntity>>;
@@ -424,7 +425,7 @@ export type GetMyChannelQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMyChannelQuery = (
   { __typename?: 'Query' }
-  & { getMyChannel: (
+  & { nativeGetMyChannel: (
     { __typename?: 'ChannelEntity' }
     & Pick<ChannelEntity, 'id' | 'desc' | 'name'>
     & { users?: Maybe<Array<(
@@ -1040,7 +1041,7 @@ export type GetMeLazyQueryHookResult = ReturnType<typeof useGetMeLazyQuery>;
 export type GetMeQueryResult = Apollo.QueryResult<GetMeQuery, GetMeQueryVariables>;
 export const GetMyChannelDocument = gql`
     query GetMyChannel {
-  getMyChannel {
+  nativeGetMyChannel {
     id
     desc
     name

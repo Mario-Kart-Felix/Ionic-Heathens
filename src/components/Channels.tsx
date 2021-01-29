@@ -1,14 +1,14 @@
 import { IonContent, IonPage } from '@ionic/react';
 import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { useGetChannelsQuery } from '../generated/graphql';
+import { useGetChannelsQuery, useJoinChannelMutation } from '../generated/graphql';
 import { snackbarState } from '../recoil/state';
+import { useRecoilState } from 'recoil';
 import Preloader from './Preloader';
 
 const Channels = () => {
 
     const { data, loading, error } = useGetChannelsQuery();
-
+    const [ joinChannel ] = useJoinChannelMutation();
     const [ snackbar, setSnackbar ] = useRecoilState(snackbarState);
 
     useEffect(() => {
@@ -26,6 +26,24 @@ const Channels = () => {
         // eslint-disable-next-line
     }, [ error ]);
 
+    const handleJoinChannel = (channelId: number) => () => {
+        joinChannel({
+            variables: {
+                channelId
+            }
+        }).then(() => {
+            setSnackbar({
+                ...snackbar,
+                isActive: true,
+                severity: {
+                    ...snackbar.severity,
+                    type: 'success'
+                },
+                message: 'Channel Joined'
+            });
+        }).catch(err => console.error(err));
+    };
+
     if (loading) {
         return <Preloader />;
     }
@@ -33,10 +51,10 @@ const Channels = () => {
     return (
         <IonPage>
             <IonContent>
-                channel
-                <pre>
-                    { JSON.stringify(data, null, 3) }
-                </pre>
+                { data && data.getChannels.length > 0 ? data.getChannels.map(channel => <button key={ channel.id } onClick={ handleJoinChannel(channel.id) }>
+                    { channel.name }
+                </button>) : <p>
+                        No channels yet</p> }
             </IonContent>
         </IonPage>
     );

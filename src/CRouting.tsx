@@ -53,6 +53,10 @@ const Routing = () => {
                                 <IonIcon icon={ triangle } />
                                 <IonLabel>Dashboard</IonLabel>
                             </IonTabButton>
+                            <IonTabButton tab="channels" href="/channels">
+                                <IonIcon icon={ square } />
+                                <IonLabel>Channels</IonLabel>
+                            </IonTabButton>
                         </IonTabBar> : <IonTabBar slot="bottom">
                             <IonTabButton tab="home" href="/">
                                 <IonIcon icon={ ellipse } />
