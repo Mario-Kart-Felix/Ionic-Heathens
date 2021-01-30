@@ -4,10 +4,10 @@ import { useGetMeQuery, useLogoutMutation } from '../../generated/graphql';
 import Preloader from '../Preloader/Preloader';
 import { Link, RouterProps } from 'react-router-dom';
 import { Storage } from '@capacitor/core';
-import './Home.css';
 import { useRecoilState } from 'recoil';
 import { snackbarState } from '../../recoil/state';
 import { useApolloClient } from '@apollo/client';
+import classes from './Home.module.css';
 
 const Home: FC<RouterProps> = ({ history }) => {
 
@@ -56,21 +56,26 @@ const Home: FC<RouterProps> = ({ history }) => {
     return (
         <IonPage>
             <IonContent>
-                <div className='homeContainer'>
-                    { data ? <Fragment>
-                        <div>
+                <div >
+                    <div className={ classes.homeContainer }>
+                        { data ? <Fragment>
+
                             <p>Welcome { data.getMe.username }</p>
-                            <Link to='/dashboard'>
-                                <IonButton onClick={ handleLogout } color='tertiary'>
-                                    Logout
+                            <IonButton onClick={ handleLogout } color='tertiary'>
+                                Logout
+                            </IonButton>
+
+                        </Fragment> :
+                            <Fragment>
+                                <p>We don't deal with outsiders very well.</p>
+                                <Link to='/login'>
+                                    <IonButton onClick={ handleLogout } color='tertiary'>
+                                        Login
                                 </IonButton>
-                            </Link>
-                        </div>
-                    </Fragment> :
-                        <div>
-                            <p>We don't deal with outsiders very well.</p>
-                        </div>
-                    }
+                                </Link>
+                            </Fragment>
+                        }
+                    </div>
                 </div>
             </IonContent>
         </IonPage>

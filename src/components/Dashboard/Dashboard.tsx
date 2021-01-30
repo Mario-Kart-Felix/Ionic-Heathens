@@ -1,9 +1,12 @@
-import { IonContent, IonPage } from '@ionic/react';
-import React, { useEffect } from 'react';
+import { IonButton, IonContent, IonPage } from '@ionic/react';
+import React, { Fragment, useEffect } from 'react';
 import { useGetMyChannelQuery } from '../../generated/graphql';
 import { snackbarState } from '../../recoil/state';
 import { useRecoilState } from 'recoil';
 import Preloader from '../Preloader/Preloader';
+import classes from './Dashboard.module.css';
+import { Link } from 'react-router-dom';
+import SingleChannel from './SingleChannel';
 
 const Dashboard = () => {
 
@@ -32,10 +35,17 @@ const Dashboard = () => {
     return (
         <IonPage>
             <IonContent>
-                dashing dash
-                <pre>
-                    { JSON.stringify(data, null, 3) }
-                </pre>
+                <div className={ classes.dashboardContainer }>
+                    <div>
+                        { data ? <SingleChannel channelId={ data.nativeGetMyChannel.id } /> : <Fragment>
+                            <Link to='/channels'>
+                                <IonButton color='tertiary'>
+                                    Explore Channels
+                                </IonButton>
+                            </Link>
+                        </Fragment> }
+                    </div>
+                </div>
             </IonContent>
         </IonPage>
     );

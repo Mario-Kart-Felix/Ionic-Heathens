@@ -1,14 +1,17 @@
-import { IonContent, IonPage } from '@ionic/react';
-import React, { useEffect } from 'react';
+import { IonButton, IonCol, IonContent, IonPage, IonRow } from '@ionic/react';
+import React, { FC, Fragment, useEffect } from 'react';
 import { useGetChannelsQuery, useJoinChannelMutation } from '../../generated/graphql';
 import { snackbarState } from '../../recoil/state';
 import { useRecoilState } from 'recoil';
 import Preloader from '../Preloader/Preloader';
+import classes from './Channels.module.css';
+import { RouterProps } from 'react-router';
+import { ApolloError } from '@apollo/client';
 
-const Channels = () => {
+const Channels: FC<RouterProps> = ({ history }) => {
 
     const { data, loading, error } = useGetChannelsQuery();
-    const [ joinChannel ] = useJoinChannelMutation();
+    const [ joinChannel, joinChannelRes ] = useJoinChannelMutation();
     const [ snackbar, setSnackbar ] = useRecoilState(snackbarState);
 
     useEffect(() => {
@@ -41,20 +44,44 @@ const Channels = () => {
                 },
                 message: 'Channel Joined'
             });
-        }).catch(err => console.error(err));
+            history.push('/dashboard');
+        }).catch((err: ApolloError) => {
+            setSnackbar({
+                ...snackbar,
+                isActive: true,
+                severity: {
+                    ...snackbar.severity,
+                    type: 'error'
+                },
+                message: err.message
+            });
+        });
     };
 
-    if (loading) {
+    if (loading || joinChannelRes.loading) {
         return <Preloader />;
     }
 
     return (
         <IonPage>
             <IonContent>
-                { data && data.getChannels.length > 0 ? data.getChannels.map(channel => <button key={ channel.id } onClick={ handleJoinChannel(channel.id) }>
-                    { channel.name }
-                </button>) : <p>
-                        No channels yet</p> }
+                <div className={ classes.channelsContainer }>
+                    <div>
+                        <IonRow>
+                            { data && data.getChannels.length > 0 ? data.getChannels.map(channel =>
+                                <IonCol key={ channel.id }>
+                                    <IonButton onClick={ handleJoinChannel(channel.id) } color='tertiary' size='default'>
+                                        { channel.name }
+                                    </IonButton>
+                                </IonCol>
+                            ) : <Fragment>
+                                    <IonButton color='tertiary' size='default'>
+                                        No channels yet
+                                </IonButton>
+                                </Fragment> }
+                        </IonRow>
+                    </div>
+                </div>
             </IonContent>
         </IonPage>
     );
