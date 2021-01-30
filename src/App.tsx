@@ -24,14 +24,12 @@ import { ApolloProvider } from '@apollo/client';
 import { useApollo } from './utils/apollo';
 import CRouting from './CRouting';
 import { RecoilRoot } from 'recoil';
-import Snackbar from './components/Snackbar';
-
+import './App.css';
 
 const App: React.FC = () => (
   <RecoilRoot>
     <ApolloProvider client={ useApollo() }>
       <IonApp>
-        <Snackbar />
         <CRouting />
       </IonApp>
     </ApolloProvider>

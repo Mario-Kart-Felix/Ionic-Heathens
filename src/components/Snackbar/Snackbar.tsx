@@ -1,11 +1,11 @@
-import { IonAlert } from '@ionic/react';
+import { IonAlert, IonToast } from '@ionic/react';
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { snackbarState } from '../recoil/state';
+import { snackbarState } from '../../recoil/state';
 
 const Snackbar = () => {
 
-    const { isActive, message } = useRecoilValue(snackbarState);
+    const { isActive, message, severity: { type } } = useRecoilValue(snackbarState);
 
     const [ snackbar, setSnackbar ] = useRecoilState(snackbarState);
 
@@ -23,12 +23,19 @@ const Snackbar = () => {
 
     return (
         isActive ? <div>
-            <IonAlert
+            { type === 'error' ? <IonAlert
                 isOpen={ isActive }
                 onDidDismiss={ handleClose }
                 header={ message! }
                 buttons={ [ 'Okay' ] }
-            />
+            /> : <IonToast
+                    isOpen={ isActive }
+                    onDidDismiss={ handleClose }
+                    message={ message! }
+                    duration={ 4000 }
+                    position='bottom'
+                /> }
+
         </div> : null
     );
 };

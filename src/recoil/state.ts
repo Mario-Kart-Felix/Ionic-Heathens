@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { ISnackbarProps } from '../interfaces';
+import { ISnackbarProps } from '../utils/interfaces';
 
 export const snackbarState = atom<ISnackbarProps>({
     key: 'snackbarState',

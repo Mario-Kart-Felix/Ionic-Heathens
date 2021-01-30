@@ -1,9 +1,9 @@
 import { IonContent, IonPage } from '@ionic/react';
 import React, { useEffect } from 'react';
-import { useGetMyChannelQuery } from '../generated/graphql';
-import { snackbarState } from '../recoil/state';
+import { useGetMyChannelQuery } from '../../generated/graphql';
+import { snackbarState } from '../../recoil/state';
 import { useRecoilState } from 'recoil';
-import Preloader from './Preloader';
+import Preloader from '../Preloader/Preloader';
 
 const Dashboard = () => {
 

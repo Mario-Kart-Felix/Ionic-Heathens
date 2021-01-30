@@ -1,12 +1,12 @@
 import { IonButton, IonContent, IonPage } from '@ionic/react';
 import React, { FC, Fragment, useEffect } from 'react';
-import { useGetMeQuery, useLogoutMutation } from '../generated/graphql';
-import Preloader from './Preloader';
+import { useGetMeQuery, useLogoutMutation } from '../../generated/graphql';
+import Preloader from '../Preloader/Preloader';
 import { Link, RouterProps } from 'react-router-dom';
 import { Storage } from '@capacitor/core';
 import './Home.css';
 import { useRecoilState } from 'recoil';
-import { snackbarState } from '../recoil/state';
+import { snackbarState } from '../../recoil/state';
 import { useApolloClient } from '@apollo/client';
 
 const Home: FC<RouterProps> = ({ history }) => {

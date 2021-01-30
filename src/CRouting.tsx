@@ -11,15 +11,17 @@ import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, square, triangle } from 'ionicons/icons';
 
 import React, { Fragment } from 'react';
-import Home from './components/Home';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import NotFound from './components/NotFound';
+import Home from './components/Home/Home';
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
+import Dashboard from './components/Dashboard/Dashboard';
+import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './PrivateRoute';
-import Channels from './components/Channels';
+import Channels from './components/Channels/Channels';
 import { useGetMeQuery } from './generated/graphql';
-import Preloader from './components/Preloader';
+import Preloader from './components/Preloader/Preloader';
+import Navbar from './components/Navbar/Navbar';
+import Snackbar from './components/Snackbar/Snackbar';
 
 const Routing = () => {
 
@@ -32,6 +34,8 @@ const Routing = () => {
     return (
         <Fragment>
             <IonReactRouter>
+                <Navbar />
+                <Snackbar />
                 <IonTabs>
                     <IonRouterOutlet>
                         <Switch>

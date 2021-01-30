@@ -6,7 +6,7 @@ import { split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 import { Storage } from '@capacitor/core';
-import { AUTH_TOKEN } from "../constants";
+import { AUTH_TOKEN } from "./constants";
 
 const createHttpLink = () => {
 
