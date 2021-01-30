@@ -1,5 +1,5 @@
 import { IonButton, IonCol, IonContent, IonPage, IonRow } from '@ionic/react';
-import React, { FC, Fragment, useEffect } from 'react';
+import React, { FC, Fragment, useEffect, useState } from 'react';
 import { useGetChannelsQuery, useJoinChannelMutation } from '../../generated/graphql';
 import { snackbarState } from '../../recoil/state';
 import { useRecoilState } from 'recoil';
@@ -13,6 +13,7 @@ const Channels: FC<RouterProps> = ({ history }) => {
     const { data, loading, error } = useGetChannelsQuery();
     const [ joinChannel, joinChannelRes ] = useJoinChannelMutation();
     const [ snackbar, setSnackbar ] = useRecoilState(snackbarState);
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
 
     useEffect(() => {
         if (error) {
@@ -30,11 +31,13 @@ const Channels: FC<RouterProps> = ({ history }) => {
     }, [ error ]);
 
     const handleJoinChannel = (channelId: number) => () => {
+        setIsSubmitting(true);
         joinChannel({
             variables: {
                 channelId
             }
         }).then(() => {
+            setIsSubmitting(false);
             setSnackbar({
                 ...snackbar,
                 isActive: true,
@@ -70,7 +73,7 @@ const Channels: FC<RouterProps> = ({ history }) => {
                         <IonRow>
                             { data && data.getChannels.length > 0 ? data.getChannels.map(channel =>
                                 <IonCol key={ channel.id }>
-                                    <IonButton onClick={ handleJoinChannel(channel.id) } color='tertiary' size='default'>
+                                    <IonButton disabled={ isSubmitting } onClick={ handleJoinChannel(channel.id) } color='tertiary' size='default'>
                                         { channel.name }
                                     </IonButton>
                                 </IonCol>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { IonButton, IonCol, IonContent, IonInput, IonPage, IonRow } from '@ionic/react';
 import { useForm } from 'react-hook-form';
 import { IRegister } from '../../utils/interfaces';
@@ -29,6 +29,7 @@ const Register: FC<props> = ({ history }) => {
 
     const [ registerUser, { error, loading } ] = useRegisterMutation();
     const [ snackbar, setSnackbar ] = useRecoilState(snackbarState);
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
 
     useEffect(() => {
         if (error) {
@@ -46,10 +47,12 @@ const Register: FC<props> = ({ history }) => {
     }, [ error ]);
 
     const handleRegister = (formData: IRegister) => {
+        setIsSubmitting(true);
         registerUser({
             variables: formData
         }).then(() => {
             reset();
+            setIsSubmitting(false);
             setSnackbar({
                 ...snackbar,
                 isActive: true,
@@ -91,7 +94,7 @@ const Register: FC<props> = ({ history }) => {
 
                                         <IonInput color={ errors.password ? 'danger' : undefined } ref={ register } name='password' placeholder='Password' type='password' />
 
-                                        <IonButton type='submit' color='tertiary'>Register</IonButton>
+                                        <IonButton disabled={ isSubmitting } type='submit' color='tertiary'>Register</IonButton>
                                     </form>
                                 </div>
                             </IonCol>

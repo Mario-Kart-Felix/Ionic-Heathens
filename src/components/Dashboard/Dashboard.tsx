@@ -37,7 +37,7 @@ const Dashboard = () => {
             <IonContent>
                 <div className={ classes.dashboardContainer }>
                     <div>
-                        { data ? <SingleChannel channelId={ data.nativeGetMyChannel.id } /> : <Fragment>
+                        { data ? <SingleChannel channel={ data } /> : <Fragment>
                             <Link to='/channels'>
                                 <IonButton color='tertiary'>
                                     Explore Channels

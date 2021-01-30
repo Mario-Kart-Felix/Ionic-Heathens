@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { IonButton, IonCol, IonContent, IonInput, IonPage, IonRow } from '@ionic/react';
 import { useForm } from 'react-hook-form';
 import { ILogin } from '../../utils/interfaces';
@@ -31,6 +31,7 @@ const Login: FC<props> = ({ history }) => {
 
     const [ login, { error, loading } ] = useLoginMutation();
     const [ snackbar, setSnackbar ] = useRecoilState(snackbarState);
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
 
     useEffect(() => {
         if (error) {
@@ -48,10 +49,12 @@ const Login: FC<props> = ({ history }) => {
     }, [ error ]);
 
     const handleLogin = (formData: ILogin) => {
+        setIsSubmitting(true);
         login({
             variables: formData
         }).then(async (data) => {
             reset();
+            setIsSubmitting(false);
             const token = data?.data?.nativeLogin;
             await Storage.set({ key: AUTH_TOKEN, value: token || '' });
             setSnackbar({
@@ -87,9 +90,12 @@ const Login: FC<props> = ({ history }) => {
                             <IonCol size='6'>
                                 <div>
                                     <form onSubmit={ handleSubmit(handleLogin) }>
+
                                         <IonInput color={ errors.username ? 'danger' : undefined } type='text' ref={ register } name='username' placeholder='Username' />
+
                                         <IonInput color={ errors.password ? 'danger' : undefined } ref={ register } name='password' placeholder='Password' type='password' />
-                                        <IonButton type='submit' color='tertiary'>Login</IonButton>
+
+                                        <IonButton disabled={ isSubmitting } type='submit' color='tertiary'>Login</IonButton>
                                     </form>
                                 </div>
                             </IonCol>

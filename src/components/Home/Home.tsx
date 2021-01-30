@@ -1,5 +1,5 @@
 import { IonButton, IonContent, IonPage } from '@ionic/react';
-import React, { FC, Fragment, useEffect } from 'react';
+import React, { FC, Fragment, useEffect, useState } from 'react';
 import { useGetMeQuery, useLogoutMutation } from '../../generated/graphql';
 import Preloader from '../Preloader/Preloader';
 import { Link, RouterProps } from 'react-router-dom';
@@ -13,7 +13,7 @@ const Home: FC<RouterProps> = ({ history }) => {
 
     const { data, loading } = useGetMeQuery();
     const [ logout, { error } ] = useLogoutMutation();
-
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
     const [ snackbar, setSnackbar ] = useRecoilState(snackbarState);
     const apolloClient = useApolloClient();
 
@@ -33,9 +33,11 @@ const Home: FC<RouterProps> = ({ history }) => {
     }, [ error ]);
 
     const handleLogout = () => {
+        setIsSubmitting(true);
         logout().then(async () => {
             await Storage.clear();
             await apolloClient.resetStore();
+            setIsSubmitting(false);
             setSnackbar({
                 ...snackbar,
                 isActive: true,
@@ -61,7 +63,7 @@ const Home: FC<RouterProps> = ({ history }) => {
                         { data ? <Fragment>
 
                             <p>Welcome { data.getMe.username }</p>
-                            <IonButton onClick={ handleLogout } color='tertiary'>
+                            <IonButton disabled={ isSubmitting } onClick={ handleLogout } color='tertiary'>
                                 Logout
                             </IonButton>
 
