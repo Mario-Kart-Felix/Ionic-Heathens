@@ -6,12 +6,15 @@ import Preloader from '../Preloader/Preloader';
 import { ApolloError } from '@apollo/client';
 import { useRecoilState } from 'recoil';
 import { snackbarState } from 'src/recoil/state';
+import Chat from './Chat';
+import Messages from './Messages';
+import classes from './SingleChannel.module.css';
 
 interface props extends RouteComponentProps {
     channel: GetMyChannelQuery;
 }
 
-const SingleChannel: FC<props> = ({ history, channel: { nativeGetMyChannel: { id, name, desc } } }) => {
+const SingleChannel: FC<props> = ({ history, channel: { nativeGetMyChannel: { id, name } } }) => {
 
     const [ isSubmitting, setIsSubmitting ] = useState(false);
     const [ leaveChannel, { loading } ] = useLeaveChannelMutation();
@@ -60,9 +63,9 @@ const SingleChannel: FC<props> = ({ history, channel: { nativeGetMyChannel: { id
 
     return (
         <Fragment>
-            <div>
+            <div className={ classes.singleChannelContainer }>
                 <IonRow>
-                    <IonCol sizeMd='6' sizeXs='12'>
+                    <IonCol sizeMd='4' sizeXs='12'>
                         <div>
                             <IonButton color='tertiary'>
                                 { name }
@@ -72,12 +75,11 @@ const SingleChannel: FC<props> = ({ history, channel: { nativeGetMyChannel: { id
                             </IonButton>
                         </div>
                     </IonCol>
-                    <IonCol sizeMd='6' sizeXs='12'>
-                        <div>
-                            <IonButton color='tertiary'>
-                                { name }
-                            </IonButton>
-                        </div>
+                    <IonCol sizeMd='4' sizeXs='12'>
+                        <Chat channelId={ id } />
+                    </IonCol>
+                    <IonCol sizeMd='4' sizeXs='12'>
+                        <Messages channelId={ id } />
                     </IonCol>
                 </IonRow>
             </div>
